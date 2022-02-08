@@ -9,7 +9,11 @@ import { useSelector } from "react-redux";
 import ProtectedRoute from "./component/Route/ProtectedRoute"
 import SelfAdminList from "./component/Admin/SelfAdminList"
 import NewProject from './component/Admin/NewProject';
-import UpdateProductAdmin from "./component/Admin/UpdateProductAdmin";
+import UpdateProjectAdmin from "./component/Admin/UpdateProjectAdmin";
+
+
+import NewHomepro from './component/Allproject/NewHomepro';
+import HomeOthers from './component/Others/HomeOthers';
 function App() {
   // const {isAuthenticated,user}=useSelector((state)=>state.user);
   return (
@@ -17,6 +21,8 @@ function App() {
    <Router>
    <Header />
    <Route exact path="/all" component={Homeall} />
+   <Route exact path="/admin/allcreate" component={NewHomepro} />
+
    <Route exact path='/' component={SeeAmazing}/>
    <Route exact path="/register" component={Register} />
 
@@ -24,21 +30,17 @@ function App() {
    
    <Route exact path="/login" component={Login}/>
 
+   <Route exact path="/others" component={HomeOthers}/>
+
    {/* <ProtectedRoute exact path="/admin/projectDetails" isAdmin={true} component={SelfAdminList} />
    <ProtectedRoute exact path="/admin/project" isAdmin={true} component={NewProject} />
     */}
 
-<Route exact path="/admin/projectDetails" isAdmin={true} component={SelfAdminList} />
+  <Route exact path="/admin/projectDetails" isAdmin={true} component={SelfAdminList} />
    <Route exact path="/admin/project" isAdmin={true} component={NewProject} />
 
 
-   {/* <ProtectedRoute
-          exact
-          path="/admin/product/:id"
-          isAdmin={true}
-          component={UpdateProduct}
-        /> */}
-   <Route exact path="/admin/projectAdminDetailsAll/:id" isAdmin={true} component={UpdateProductAdmin} />
+   <Route exact path="/admin/projectAdminDetailsAll/:id" isAdmin={true} component={UpdateProjectAdmin} />
    
 
    

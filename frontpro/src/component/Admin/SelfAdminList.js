@@ -42,10 +42,11 @@ const SelfAdminList = ({ history ,params}) => {
     }
     dispatch(getAdminAllProject());
   }, [dispatch, alert, error, deleteError, history, isDeleted]);
-
+// const rows=[];
 //   projectAdminDetailsAll &&
-//   projectAdminDetailsAll.map((item)=>{
-//     id:item._id
+//   projectAdminDetailsAll.forEach((item)=>{
+//     id:item._id,
+    
 //   }
    
 //  )
@@ -72,20 +73,20 @@ const SelfAdminList = ({ history ,params}) => {
                 <p>{item.github_URL}</p>
 
                 
-                {/* <Button
-                  variant="light"><Link to={`/admin/projectAdminDetailsAll/${params.getValue(params.id,"id")}}`}>Edit</Link>
+                <Button
+                  variant="light"><Link to={`/admin/projectAdminDetailsAll/${item._id}`}>Edit</Link>
                 
-                </Button> */}
+                </Button>
                 
-                {/* <Button
+                <Button
                   variant="light"
                   onClick={() =>
-                    deleteProjectHandler(params.getValue(params.id))
+                    deleteProjectHandler(`${item._id}`)
                   }
                 >
                   Delete
                 
-                </Button> */}
+                </Button>
               </div>
             </>
           ))}

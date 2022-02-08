@@ -32,13 +32,22 @@ const ProjectDetails = ({ match }) => {
           style={{ border: "2px solid red", width: "650px", height: "500px" }}
         >
           <p>{projectDetail.title}</p>
-          {projectDetail.description &&
+          {/* {projectDetail.description &&
             projectDetail.description.map((item, i) => (
               <>
                 <img src={item.url} style={{ width: "300px" }} />
                 <p>{item.text}</p>
               </>
-            ))}
+            ))} */}
+
+          {/* {projectDetail &&
+            projectDetail.map((item, i) => (
+              <> */}
+                <img src={projectDetail.images} style={{ width: "300px" }} />
+                <p>{projectDetail.text}</p>
+              {/* </>
+            ))} */}
+
 
           <p>{projectDetail.demo_URL}</p>
           <p>{projectDetail.github_URL}</p>
