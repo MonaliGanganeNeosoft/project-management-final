@@ -5,6 +5,8 @@ import { getAllProject } from '../../actions/projectAllaction';
 import { useSelector,useDispatch } from 'react-redux';
 import Loader from '../layout/Loader/Loader';
 import {useAlert} from "react-alert";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 // const project = {
 //   title:"ii1",
 //   description:[
@@ -36,6 +38,10 @@ const Homeall = () => {
     ):(
       <>
       <p className='homeHeading'>All Projects</p>
+
+      <Button variant="light">
+          <Link to="/admin/allcreate">Add project</Link>
+        </Button>
   <div className='container' id='container'>
     {
       projectDetails && projectDetails.map(project=>(

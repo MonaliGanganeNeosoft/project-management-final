@@ -13,10 +13,19 @@ import {
     NEW_PROJECT_SUCCESS,
     NEW_PROJECT_RESET,
 
+    NEWAll_PROJECT_FAIL,
+    NEWAll_PROJECT_REQUEST,
+    NEWAll_PROJECT_RESET,
+    NEWAll_PROJECT_SUCCESS,
+
+
     DELETE_ADMINPROJECT_FAIL,
     DELETE_ADMINPROJECT_REQUEST,
     DELETE_ADMINPROJECT_RESET,
     DELETE_ADMINPROJECT_SUCCESS,
+
+    UPDATE_ADMINPROJECT_FAIL,UPDATE_ADMINPROJECT_REQUEST,UPDATE_ADMINPROJECT_SUCCESS,
+    UPDATE_ADMINPROJECT_RESET,
 
     PROJECT_DETAILS_REQUEST,
     PROJECT_DETAILS_FAIL,
@@ -39,6 +48,33 @@ export const getAllProject = () =>async (dispatch)=>{
         })
     }
 }
+// Create all new project
+export const createAllProjectAdmin = (projectData) => async (dispatch) => {
+  try {
+    dispatch({ type:NEWAll_PROJECT_REQUEST });
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/admin/projectDetail/new`,
+      projectData,
+      config
+    );
+
+    dispatch({
+      type: NEWAll_PROJECT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: NEWAll_PROJECT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 //get All project for admin
 export const getAdminAllProject = () =>async (dispatch)=>{
     try{
@@ -135,6 +171,33 @@ export const createProjectAdmin = (projectData) => async (dispatch) => {
       });
     }
   };
+
+// update admin project
+export const updateAdminProject = (id,projectData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_ADMINPROJECT_REQUEST });
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const { data } = await axios.put(
+      `/api/v1/admin/projectAdminDetailsAll/${id}`,
+      projectData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_ADMINPROJECT_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_ADMINPROJECT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
   // export const createProjectAdmin = (projectData) => async (dispatch) => {
   //   try {

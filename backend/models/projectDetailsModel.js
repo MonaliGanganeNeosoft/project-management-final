@@ -4,19 +4,31 @@ const projectDetailsSchema = mongoose.Schema({
         type:String,
         required:[true,"pls enter title"]
     },
-    description:[
-        {
-            url:{
-                type:String,
-                required:false,
-            },
-            text:{
-                type:String,
-                required:false,
 
-            }
-        },
+    images:[
+        {
+            type:String,
+            required:false
+        }
     ],
+    text:{
+                    type:String,
+                    required:false,
+    
+                },
+    // description:[
+    //     {
+    //         url:{
+    //             type:String,
+    //             required:false,
+    //         },
+    //         text:{
+    //             type:String,
+    //             required:false,
+
+    //         }
+    //     },
+    // ],
     demo_URL:{
         type:String,
         required:[false,"pls enter demo"]

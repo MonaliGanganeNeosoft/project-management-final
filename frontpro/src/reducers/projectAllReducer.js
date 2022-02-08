@@ -12,6 +12,14 @@ import {
     NEW_PROJECT_SUCCESS,
     NEW_PROJECT_RESET,
 
+    NEWAll_PROJECT_FAIL,
+    NEWAll_PROJECT_REQUEST,
+    NEWAll_PROJECT_RESET,
+    NEWAll_PROJECT_SUCCESS,
+
+    UPDATE_ADMINPROJECT_FAIL,UPDATE_ADMINPROJECT_REQUEST,UPDATE_ADMINPROJECT_SUCCESS,
+    UPDATE_ADMINPROJECT_RESET,
+
     DELETE_ADMINPROJECT_FAIL,
     DELETE_ADMINPROJECT_REQUEST,
     DELETE_ADMINPROJECT_RESET,
@@ -51,6 +59,41 @@ export const projectAllReducer=(state={projectDetails:[]},action)=>{
             return state;
     }
 };
+//new all project
+export const newProjectAllReducer = (state = { projectDetails:[] }, action) => {
+  switch (action.type) {
+    case NEWAll_PROJECT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case NEWAll_PROJECT_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        projectDetails:action.payload.projectDetails,
+      };
+    case NEWAll_PROJECT_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case NEWAll_PROJECT_RESET:
+      return {
+        ...state,
+        success: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
 
 export const projectAllAdminReducer=(state={projectAdminDetailsAll:[]},action)=>{
   switch (action.type){
@@ -85,6 +128,7 @@ export const projectAllAdminReducer=(state={projectAdminDetailsAll:[]},action)=>
 export const projectDeleteAdminReducer=(state={},action)=>{
   switch (action.type){
       case DELETE_ADMINPROJECT_REQUEST:
+       
           return{
               
               ...state,
@@ -96,7 +140,10 @@ export const projectDeleteAdminReducer=(state={},action)=>{
               loading:false,
              isDeleted:action.payload,
           };
+
+          
       case DELETE_ADMINPROJECT_FAIL:
+       
           return{
             ...state,
               loading:false,
@@ -107,6 +154,48 @@ export const projectDeleteAdminReducer=(state={},action)=>{
           return{
             ...state,
               isDeleted:false,
+          };
+         
+          
+          case CLEAR_ERRORS:
+              return{
+                  ...state,
+                  error:null,
+              };
+      default:
+          return state;
+  }
+};
+//update admin
+export const projectUpdateAdminReducer=(state={},action)=>{
+  switch (action.type){
+     
+        case UPDATE_ADMINPROJECT_REQUEST:
+          return{
+              
+              ...state,
+              loading:true,
+          }
+     
+          case UPDATE_ADMINPROJECT_SUCCESS:
+            return{
+              ...state,
+                loading:false,
+               isUpdated:action.payload,
+            };
+     
+        case UPDATE_ADMINPROJECT_FAIL:
+          return{
+            ...state,
+              loading:false,
+              error:action.payload,
+          };
+
+         
+          case UPDATE_ADMINPROJECT_RESET:
+          return{
+            ...state,
+              isUpdated:false,
           };
           
           case CLEAR_ERRORS:

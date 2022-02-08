@@ -21,12 +21,14 @@ const ProjectAll = ({project}) => {
               </Card.Text > */}
               <Card.Img
               variant="top"
-              src={project.description[0].url}
+              // src={project.description[0].url}
+              src={project.images}
               alt={project.title}
               style={{height:"150px"}}
             />
               {/* <p style={{textAlign:"center"}}>{project.description[0].url}</p> */}
-              <p style={{textAlign:"center"}}>{project.description[0].text}</p>
+              {/* <p style={{textAlign:"center"}}>{project.description[0].text}</p> */}
+              <p style={{textAlign:"center"}}>{project.text}</p>
             </Card.Body>
           </Card>
 
