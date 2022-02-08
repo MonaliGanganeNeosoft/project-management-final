@@ -1,0 +1,511 @@
+import React,{useEffect} from 'react';
+// import { Card } from "react-bootstrap";
+// import { getAllProjectDetails } from '../../actions/projectAllaction';
+// import { useSelector,useDispatch } from 'react-redux';
+// const projectDetails = ({match}) => {
+//     const dispatch = useDispatch();
+//     const {projectDetail,loading}=useSelector(
+//         (state)=>state.projectDetail
+//         );
+
+//     useEffect(() => {
+//      dispatch(getAllProjectDetails(match.params.id))
+//     }, [dispatch,match.params.id]);
+    
+//   return (
+//       <>
+//       <div className='ProjectDetails'>
+//           <div>
+//           {/* <Card.Img
+//               variant="top"
+//               src={projectDetail.description[0].url}
+//               alt={projectDetail.title}
+//               style={{height:"150px"}}
+//             /> */}
+//           </div>
+//       </div>
+//       </>
+
+//   );
+// };
+
+// export default projectDetails;
+
+
+
+{projectDetail.description &&
+                 projectDetail.description.map((item)=>(
+
+            <Card.Img
+              variant="top"
+              src={item.description[0].url}
+              alt={item.title}
+              style={{height:"150px"}}
+            />
+                 )
+ 6:40           
+
+
+
+
+ const mongoose = require("mongoose");
+const projectDetailsSchema = mongoose.Schema({
+    title:{
+        type:String,
+        required:[true,"pls enter title"]
+    },
+    description:[
+        {
+            url:{
+                type:String,
+                required:false,
+            },
+            text:{
+                type:String,
+                required:false,
+
+            }
+        },
+    ],
+    demo_URL:{
+        type:String,
+        required:[true,"pls enter demo"]
+    },
+    github_URL:{
+        type:String,
+        required:[true,"pls enter github"]
+    },
+    //multiple question
+    questionss:[
+        
+        {
+            questions:{
+                
+                    type:String,
+                    required:false
+                
+            },
+            ans: {
+                type: String,
+                required: false,
+              },
+        }
+    ],
+    //one question=>1 ans
+    anwers:[
+        {
+            user: {
+                type: mongoose.Schema.ObjectId,
+                ref: "User",
+                required: false,
+              },
+              name: {
+                type: String,
+                required: false,
+              },
+              question: {
+                type: Number,
+                required: false,
+              },
+              ans: {
+                type: String,
+                required: false,
+              },
+        }
+    ],
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        required: false,
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
+    }
+})
+module.exports = mongoose.model("ProjectDetails",projectDetailsSchema)
+
+
+import React,{useEffect,useState} from 'react';
+import { useSelector,useDispatch } from 'react-redux';
+import { clearErrors,createProjectAdmin } from '../../actions/projectAllaction';
+import { useAlert } from 'react-alert';
+import { Button } from 'react-bootstrap';
+import { NEW_PROJECT_RESET } from '../../constants/projectAllConstants';
+import SelfAdminList from './SelfAdminList';
+
+const NewProject = () => {
+    const dispatch = useDispatch();
+    const alert = useAlert();
+    const { loading, error, success } = useSelector((state) => state.createProjectAdmin);
+
+
+    const[title,setTitle] = useState("");
+
+    const[text,setText] = useState("");
+    const[demo,setDemoUrl] = useState("");
+    const[github,setGithub_Url] = useState("");
+
+    const [images, setImages] = useState([]);
+  const [imagesPreview, setImagesPreview] = useState([]);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (success) {
+      alert.success("Project Created Successfully");
+    //   history.push("/admin/dashboard");
+      dispatch({ type: NEW_PROJECT_RESET });
+    }
+  }, [dispatch, alert, error, success]);
+
+  const createProductSubmitHandler = (e) => {
+    e.preventDefault();
+
+    const myForm = new FormData();
+
+    myForm.set("title", title);
+    myForm.set("text", text);
+    myForm.set("demo",demo );
+    myForm.set("github", github);
+   
+    images.forEach((image) => {
+      myForm.append("images", image);
+    });
+    dispatch(createProjectAdmin(myForm));
+  };
+
+  const createProjectImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    setImages([]);
+    setImagesPreview([]);
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImagesPreview((old) => [...old, reader.result]);
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+  return <>
+  <div>hii CRAETE PROJECT</div>
+  <SelfAdminList />
+           <div>
+               <form
+               className="createProjectForm"
+               encType="multipart/form-data"
+               onSubmit={createProductSubmitHandler}
+               >
+               <div>
+              
+              <input
+                type="text"
+                placeholder="Project title"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            <div id="createProjectFormFile">
+              <input
+                type="file"
+                name="avatar"
+                accept="image/*"
+                onChange={createProjectImagesChange}
+                multiple
+              />
+            </div>
+
+            <div id="createProjectFormImage">
+              {imagesPreview.map((image, index) => (
+                <img key={index} src={image} alt="Product Preview" />
+              ))}
+            </div>
+            
+            <div>
+              
+              <input
+                type="text"
+                placeholder="Project text"
+                required
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
+            </div>
+
+
+            <div>
+              
+              <input
+                type="text"
+                placeholder="Project demo url"
+                required
+                value={demo}
+                onChange={(e) => setDemoUrl(e.target.value)}
+              />
+            </div>
+            <div>
+              
+              <input
+                type="text"
+                placeholder="Project githhub url"
+                required
+                value={github}
+                onChange={(e) => setGithub_Url(e.target.value)}
+              />
+            </div>
+            <Button
+              id="createProductBtn"
+              type="submit"
+              disabled={loading ? true : false}
+            >
+              Create
+            </Button>
+
+               </form>
+           </div>
+  </>;
+};
+
+export default NewProject;
+
+
+
+import React,{useEffect} from 'react'
+import "./Home.css"
+import ProjectAll from "./ProjectAll.js";
+import { getAllProject } from '../../actions/projectAllaction';
+import { useSelector,useDispatch } from 'react-redux';
+import Loader from '../layout/Loader/Loader';
+import {useAlert} from "react-alert";
+// const project = {
+//   title:"ii1",
+//   description:[
+//     {
+//       url:"https://www.educationalappstore.com/blog/wp-content/uploads/2018/09/project-management-750x350.jpg",
+//       text:"hii"
+//     }
+//   ],
+//   demo_URL:"hii",
+//   github_URL:"hii"
+// }
+const Homeall = () => {
+  const alert = useAlert();
+  const dispatch = useDispatch();
+  const {loading,error,projectDetails} = useSelector(
+    (state)=>state.projectDetails
+  );
+  useEffect(() => {
+    if(error){
+      return alert.error(error);
+    }
+   dispatch(getAllProject());
+  }, [dispatch,error,alert]);
+  
+  return (
+    <>
+    {loading ? (
+      <Loader />
+    ):(
+      <>
+      <p className='homeHeading'>All Projects</p>
+  <div className='container' id='container'>
+    {
+      projectDetails && projectDetails.map(project=>(
+        <ProjectAll project={project}/>
+      ))
+    }
+    {/* <ProjectAll project={project}/>
+    <ProjectAll project={project}/>
+    <ProjectAll project={project}/>
+    <ProjectAll project={project}/> */}
+    
+  </div> 
+      </>
+    )}
+    </>
+  )
+}
+
+export default Homeall
+
+
+
+
+import React,{useEffect} from 'react'
+import "./Home.css"
+import ProjectAll from "./ProjectAll.js";
+import { getAllProject } from '../../actions/projectAllaction';
+import { useSelector,useDispatch } from 'react-redux';
+import Loader from '../layout/Loader/Loader';
+import {useAlert} from "react-alert";
+// const project = {
+//   title:"ii1",
+//   description:[
+//     {
+//       url:"https://www.educationalappstore.com/blog/wp-content/uploads/2018/09/project-management-750x350.jpg",
+//       text:"hii"
+//     }
+//   ],
+//   demo_URL:"hii",
+//   github_URL:"hii"
+// }
+const Homeall = () => {
+  const alert = useAlert();
+  const dispatch = useDispatch();
+  const {loading,error,projectDetails} = useSelector(
+    (state)=>state.projectDetails
+  );
+  useEffect(() => {
+    if(error){
+      return alert.error(error);
+    }
+   dispatch(getAllProject());
+  }, [dispatch,error,alert]);
+  
+  return (
+    <>
+    {loading ? (
+      <Loader />
+    ):(
+      <>
+      <p className='homeHeading'>All Projects</p>
+  <div className='container' id='container'>
+    {
+      projectDetails && projectDetails.map(project=>(
+        <ProjectAll project={project}/>
+      ))
+    }
+    {/* <ProjectAll project={project}/>
+    <ProjectAll project={project}/>
+    <ProjectAll project={project}/>
+    <ProjectAll project={project}/> */}
+    
+  </div> 
+      </>
+    )}
+    </>
+  )
+}
+
+export default Homeall
+
+
+
+====================================
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  clearErrors,
+  getAdminAllProject,
+  deleteProject,
+} from "../../actions/projectAllaction";
+import { Link } from "react-router-dom";
+import { useAlert } from "react-alert";
+import { DELETE_PROJECT_RESET } from "../../constants/projectAllConstants";
+import { Button } from "react-bootstrap";
+
+const SelfAdminList = ({ history, params }) => {
+  const dispatch = useDispatch();
+  const alert = useAlert();
+  const { error, projectAdminDetails } = useSelector(
+    (state) => state.projectAdminDetails
+  );
+
+  const { error: deleteError, isDeleted } = useSelector(
+    (state) => state.projectDelete
+  );
+
+  const deleteProjectHandler = (id) => {
+    dispatch(deleteProject(id));
+  };
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+    if (deleteError) {
+      alert.error(deleteError);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      alert.success("Product Deleted Successfully");
+      // history.push("/admin/projectDetails");
+      dispatch({ type: DELETE_PROJECT_RESET });
+    }
+    dispatch(getAdminAllProject());
+  }, [dispatch, alert, error, deleteError, history, isDeleted]);
+
+  return (
+    <>
+      <div>
+        <p>hii</p>
+        {/* <p><Link to="/admin/project">create</Link> </p>*/}
+        <Button variant="light">
+          <Link to="/admin/project">create</Link>
+        </Button>
+        {projectAdminDetails &&
+          projectAdminDetails.map((item) => (
+            <>
+              <div className="innerc" style={{ border: "2px solid black" }}>
+                <p>{item._id}</p>
+                <p>{item.title}</p>
+                <img src={item.description[0].url} style={{ width: "300px" }} />
+                <p>{item.description[0].text}</p>
+                <p>{item.demo_URL}</p>
+                <p>{item.github_URL}</p>
+
+                {/* <p>
+                  <Link to={`/admin/projectEdit`}>Edit</Link>
+                </p> */}
+                {/* <Link to={`/admin/projectDetails${params.getValue(params.id, "id")}`}>
+             
+            </Link> */}
+
+                {/* <p><Link to={`/admin/del`}>delete</Link></p> */}
+                {/* <Button
+                  variant="light"
+                  onClick={() =>
+                    deleteProjectHandler(params.getValue(params.id, "id"))
+                  }
+                >
+                  Delete
+                
+                </Button> */}
+              </div>
+            </>
+          ))}
+      </div>
+    </>
+  );
+};
+
+export default SelfAdminList;
+
+
+
+
+{
+    "title":"two",
+    "description":[{
+        "url":"https://www.educationalappstore.com/blog/wp-content/uploads/2018/09/project-management-750x350.jpg",
+        "text":"hii this is text"
+       
+    }],
+    "demo_URL":"demmo link url as pro4",
+    "github_URL":"git link as pro4"
+    
+}

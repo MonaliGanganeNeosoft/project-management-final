@@ -1,0 +1,6 @@
+.homeHeading{
+    text-align: center;
+    border-bottom: 1px solid rgba(21,21,21,0.5);
+    margin: 1vmax auto;
+    width: 20vmax;
+}
